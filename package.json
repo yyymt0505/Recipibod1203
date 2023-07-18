@@ -5,7 +5,7 @@
   "scripts": {
     "start": "bin/hubot run"
   },
-  "author": "",
+  "author": "Hayato YAMAGUCHI",
   "keywords": [
     "hubot",
     "direct",

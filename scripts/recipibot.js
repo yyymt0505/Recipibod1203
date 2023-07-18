@@ -122,7 +122,7 @@ module.exports = (robot) => {
                     youtube.search.list({
                         part: 'snippet',
                         q: words,
-                        maxResults: 3,
+                        maxResults: 2,
                     }, (err, data) => {
                         if (err) {
                             console.log(err)
