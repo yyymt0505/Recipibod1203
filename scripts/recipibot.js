@@ -78,7 +78,7 @@ module.exports = (robot) => {
                         text: `${searchWords[chatId]}を使った${genre[chatId]}のレシピですね.`,
                         onsend: (sent) => {
                             res.send({
-                                text: `追加したい材料があれば\n\" add: \"の後に続けて送信してください.\n複数ある場合は\",\"区切りで教えてください.\nなければ検索方法を\nYouTube, Google, cookpadから選んで、\n\"cmd: \"に続けて教えてください.`,
+                                text: `追加したい材料があれば\n\" add: \"の後に続けて送信してください.\n複数ある場合は\",\"区切りで教えてください.\nなければ\n\"cmd: YouTube\"と送信してください.\n※googleとcookpad検索は追加食材がある場合のみ利用できます。`,
                             })
                         }
                     });
@@ -89,6 +89,8 @@ module.exports = (robot) => {
     // 追加の材料がある場合, addの時
     robot.respond(/add:\s*(.+)$/i, (res) => {
         const chatId = res.message.rooms[res.message.room].id;
+        //
+        addWords[chatId] = undefined;
         // searchWordが未定義の時はメッセージを送る.
         if (!searchWords[chatId]) {
             res.send({
@@ -98,17 +100,13 @@ module.exports = (robot) => {
             res.send({
                 text: 'ジャンルを先に選択してください。'
             })
-        }
-        else {
+        } else {
             addWords[chatId] = res.match[1];
             res.send({
                 text:
                     `${searchWords[chatId]},${addWords[chatId]}を使った${genre[chatId]}のレシピを検索します.\n検索方法を\nYouTube, Google, cookpadから選んで、\n\"cmd: \"に続けて教えてください.`,
-                onsend: (sent) => {
-                }
             });
         }
-
     });
 
     // cmd:で検索方法を尋ねる. 
@@ -146,7 +144,7 @@ module.exports = (robot) => {
                 onsend: (sent) => {
                     res.send({
                         text: `https://www.google.com/search?q=${resultWord}`
-                    })
+                    });
                 }
             });
         } else if (res.match[1].toLowerCase() == "cookpad") {
@@ -156,7 +154,7 @@ module.exports = (robot) => {
                 onsend: (sent) => {
                     res.send({
                         text: `https://cookpad.com/search/${resultWord}`
-                    })
+                    });
                 }
             });
         }
